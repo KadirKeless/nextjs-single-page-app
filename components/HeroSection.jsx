@@ -53,10 +53,13 @@ export default function HeroSection() {
     setIsContactModalOpen(false)
   }
 
-  const handleWhatsAppClick = () => {
+  const handleWhatsAppClick = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
     const message = 'Merhaba!\n\nPortföy siteniz üzerinden ulaşıyorum. Projeleriniz ve hizmetleriniz hakkında bilgi almak istiyorum.'
     const whatsappUrl = `https://wa.me/905383645834?text=${encodeURIComponent(message)}`
-    window.open(whatsappUrl, '_blank')
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
   }
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -118,10 +121,15 @@ export default function HeroSection() {
             </motion.p>
             <motion.div variants={itemVariants}>
               <motion.button
-                onClick={handleOpenContactModal}
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  handleOpenContactModal()
+                }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+                type="button"
                 className="inline-block px-8 py-4 bg-primary text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-primary/90"
               >
                 İletişim
@@ -151,8 +159,12 @@ export default function HeroSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={handleCloseContactModal}
-            className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-md z-50 overflow-y-auto p-2 sm:p-4"
+              onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                  handleCloseContactModal()
+                }
+              }}
+              className="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-md z-50 overflow-y-auto p-2 sm:p-4"
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -165,7 +177,11 @@ export default function HeroSection() {
               {/* Modal Header */}
               <div className="mb-6 relative">
                 <button
-                  onClick={handleCloseContactModal}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    handleCloseContactModal()
+                  }}
                   className={`absolute -top-2 -right-2 z-50 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg ${theme === 'light' ? 'bg-white text-gray-600 hover:bg-gray-100 hover:scale-110 border border-gray-200' : 'bg-[#2D3348] text-[#E5E7EB] hover:bg-[#3B4257] hover:scale-110 border border-[#3B4257]'}`}
                   aria-label="Kapat"
                   type="button"
@@ -300,9 +316,14 @@ export default function HeroSection() {
               {/* Close Button at Bottom */}
               <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
                 <motion.button
-                  onClick={handleCloseContactModal}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    handleCloseContactModal()
+                  }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
+                  type="button"
                   className={`w-full px-4 py-2.5 rounded-lg font-medium transition-all duration-300 ${theme === 'light' ? 'bg-gray-200 text-gray-700 hover:bg-gray-300' : 'bg-[#2D3348] text-[#E5E7EB] hover:bg-[#3B4257]'}`}
                 >
                   Kapat

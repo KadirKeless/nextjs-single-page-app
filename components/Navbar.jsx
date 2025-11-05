@@ -6,8 +6,8 @@ import { useTheme } from './ThemeProvider'
 
 const navItems = [
   { id: 'anasayfa', label: 'Anasayfa' },
-  { id: 'hakkimda', label: 'Hakkımda' },
   { id: 'hizmetler', label: 'Hizmetler' },
+  { id: 'hakkimda', label: 'Hakkımda' },
   { id: 'ozgecmis', label: 'Özgeçmiş' },
   { id: 'iletisim', label: 'İletişim' },
 ]
@@ -43,12 +43,29 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const handleNavClick = (sectionId) => {
-    const element = document.getElementById(sectionId)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      setIsMobileMenuOpen(false)
-    }
+  const handleNavClick = (e, sectionId) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
+    // Mobile menüyü kapat
+    setIsMobileMenuOpen(false)
+    
+    // Scroll işlemini biraz geciktirerek DOM'un güncellenmesini bekle
+    setTimeout(() => {
+      const element = document.getElementById(sectionId)
+      if (element) {
+        // Navbar yüksekliğini dinamik olarak hesapla
+        const navbar = document.querySelector('nav')
+        const navbarHeight = navbar ? navbar.offsetHeight : (window.innerWidth < 768 ? 70 : 80)
+        const elementPosition = element.getBoundingClientRect().top + window.pageYOffset
+        const offsetPosition = elementPosition - navbarHeight
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        })
+      }
+    }, 150)
   }
 
   return (
@@ -65,7 +82,7 @@ export default function Navbar() {
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
             className="text-xl font-bold text-primary cursor-pointer"
-            onClick={() => handleNavClick('anasayfa')}
+            onClick={(e) => handleNavClick(e, 'anasayfa')}
           >
             Kadir Keleş
           </motion.div>
@@ -93,7 +110,7 @@ export default function Navbar() {
               {navItems.map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => handleNavClick(item.id)}
+                  onClick={(e) => handleNavClick(e, item.id)}
                   className={`relative px-3 py-2 text-sm font-medium transition-colors ${
                     activeSection === item.id
                       ? 'text-primary'
@@ -132,7 +149,12 @@ export default function Navbar() {
               )}
             </button>
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                setIsMobileMenuOpen(!isMobileMenuOpen)
+              }}
+              type="button"
               className="p-2 text-gray-700 dark:text-gray-300 hover:text-primary"
               aria-label="Menu"
             >
@@ -166,7 +188,7 @@ export default function Navbar() {
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => handleNavClick(item.id)}
+                onClick={(e) => handleNavClick(e, item.id)}
                 className={`block w-full text-left px-3 py-2 rounded-lg transition-colors ${
                   activeSection === item.id
                     ? 'bg-primary text-white'

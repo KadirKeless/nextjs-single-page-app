@@ -6,10 +6,13 @@ import { useTheme } from './ThemeProvider'
 export default function ContactSection() {
   const { theme } = useTheme()
 
-  const handleWhatsAppClick = () => {
+  const handleWhatsAppClick = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
     const message = 'Merhaba!\n\nPortföy siteniz üzerinden ulaşıyorum. Projeleriniz ve hizmetleriniz hakkında bilgi almak istiyorum.'
     const whatsappUrl = `https://wa.me/905383645834?text=${encodeURIComponent(message)}`
-    window.open(whatsappUrl, '_blank')
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
   }
 
   return (

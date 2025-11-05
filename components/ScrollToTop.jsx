@@ -34,7 +34,10 @@ export default function ScrollToTop() {
     }
   }, [])
 
-  const scrollToTop = () => {
+  const scrollToTop = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    
     window.scrollTo({
       top: 0,
       behavior: 'smooth',

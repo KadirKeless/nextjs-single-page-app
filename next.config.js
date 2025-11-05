@@ -17,11 +17,6 @@ const nextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
-  // Performance optimizations
-  experimental: {
-    optimizeCss: true,
-  },
-
   // Security headers
   async headers() {
     return [
